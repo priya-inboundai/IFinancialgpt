@@ -1,7 +1,15 @@
 {
-  "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.4"
+  "name": "calculator-app",
+  "version": "1.0.0",
+  "description": "Calculator app with React and Express",
+  "scripts": {
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+    "build-client": "cd client && npm run build",
+    "postinstall": "npm run install-client && npm run install-server && npm run build-client",
+    "start": "cd server && node server.js"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }

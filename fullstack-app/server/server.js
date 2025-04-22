@@ -1,14 +1,12 @@
 // server.js
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
 
 // Root route
 app.get('/', (req, res) => {
@@ -47,7 +45,11 @@ Content-Type: application/json
   `);
 });
 
-// Calculate route
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// API Routes
 app.post('/calculate', (req, res) => {
   const { firstOperand, secondOperand, operator } = req.body;
   
@@ -80,10 +82,33 @@ app.post('/calculate', (req, res) => {
   res.json({ result });
 });
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
+
+// For production deployment - add these lines
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React build
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  });
+} else {
+  // Development - show API info
+  app.get('/', (req, res) => {
+    res.send(`
+      <html>
+        <head><title>Calculator API</title></head>
+        <body>
+          <h1>Calculator API</h1>
+          <p>This is the development version of the API.</p>
+        </body>
+      </html>
+    `);
+  });
+}
 
 // Start server
 app.listen(PORT, () => {
