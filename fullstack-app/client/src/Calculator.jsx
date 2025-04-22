@@ -78,7 +78,7 @@ function Calculator() {
     
     try {
       // Call the backend for calculation
-      const response = await fetch('http://localhost:3001/calculate', {
+      const response = await fetch('/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
